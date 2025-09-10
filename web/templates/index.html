@@ -1,23 +1,37 @@
 {% extends "base.html" %}
-
-{% block title %}Início - FCJA{% endblock %}
+{% block title %}Agendamentos FCJA{% endblock %}
 
 {% block content %}
-    <div class="card shadow p-4">
-        <h2 class="mb-3">Agendar Visita</h2>
-        <div class="d-flex gap-2">
-            <a href="{{ url_for('agendar_form', tipo='visitante') }}" class="btn btn-primary">Visitante</a>
-            <a href="{{ url_for('agendar_form', tipo='escola') }}" class="btn btn-primary">Escola</a>
-            <a href="{{ url_for('agendar_form', tipo='ies') }}" class="btn btn-primary">IES</a>
+<div class="row justify-content-center">
+  <div class="col-12 col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-4 text-center">Agendamentos FCJA</h1>
+
+        <!-- Agendar Visita -->
+        <div class="mb-4">
+          <h5>Agendar Visita</h5>
+          <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ url_for('agendar_form', tipo='visitante') }}" class="btn btn-custom">Visitante</a>
+            <a href="{{ url_for('agendar_form', tipo='escola') }}" class="btn btn-custom">Escola</a>
+            <a href="{{ url_for('agendar_form', tipo='ies') }}" class="btn btn-custom">IES</a>
+          </div>
         </div>
 
-        <hr class="my-4">
-
-        <h2 class="mb-3">Pesquisa</h2>
-        <a href="{{ url_for('agendar_form', tipo='pesquisador') }}" class="btn btn-dark">Pesquisador</a>
-
-        <div class="mt-4">
-            <a href="{{ url_for('ultimos') }}" class="link-primary">Ver últimos agendamentos</a>
+        <!-- Pesquisa -->
+        <div class="mb-4">
+          <h5>Pesquisa</h5>
+          <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ url_for('agendar_form', tipo='pesquisador') }}" class="btn btn-custom">Pesquisador</a>
+          </div>
         </div>
+
+        <!-- Últimos agendamentos -->
+        <div class="text-center">
+          <a href="{{ url_for('ultimos') }}">Ver últimos agendamentos</a>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 {% endblock %}
