@@ -1,57 +1,113 @@
-/* ============================
-   Paleta e estilo base
-============================ */
-:root {
-  --fcja-bg: #f6f8fb;
-}
+/* ===============================
+   Estilos gerais do sistema FCJA
+   =============================== */
 
 body {
-  background: var(--fcja-bg);
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
 }
 
-/* ============================
-   Cartões de informação
-============================ */
-.card.info-card {
-  border-left: 4px solid #0d6efd;
+h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
 }
 
-/* ============================
-   Tabelas
-============================ */
-.table > :not(caption) > * > * {
-  vertical-align: middle;
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-/* ============================
-   Navbar (cabeçalho)
-============================ */
-.navbar-brand {
-  letter-spacing: .2px;
+/* ===============================
+   Cabeçalho
+   =============================== */
+
+header {
+  background-color: #7a0000; /* Vermelho institucional */
+  color: #fff;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.2em;
 }
 
-.navbar {
-  background-color: #7a1111 !important; /* vermelho */
+/* ===============================
+   Botões principais (Visitante, Escola, IES)
+   =============================== */
+
+#botoes-agendamento {
+  margin: 20px 0;
 }
 
-/* Logo na navbar */
-.navbar-brand img {
-  margin-right: 10px;
-  height: 40px; /* tamanho fixo */
+#botoes-agendamento .btn {
+  background-color: #000000;   /* Fundo preto */
+  color: #ffffff;              /* Texto branco */
+  border: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 8px;           /* Espaço entre os botões */
+  transition: background-color 0.3s ease;
 }
 
-/* ============================
-   Botões customizados
-============================ */
-.btn-custom {
-  background-color: #343a40;  /* preto/cinza escuro */
+#botoes-agendamento .btn:hover {
+  background-color: #333333;   /* Cinza escuro no hover */
+}
+
+/* ===============================
+   Formulários
+   =============================== */
+
+form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+button[type="submit"] {
+  margin-top: 15px;
+  background-color: #7a0000;
   color: #fff;
   border: none;
-  transition: background-color 0.2s ease;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
-.btn-custom:hover {
-  background-color: #212529; /* preto mais forte */
-  color: #fff;
+button[type="submit"]:hover {
+  background-color: #7a0000;
+}
+
+/* ===============================
+   Rodapé
+   =============================== */
+
+footer {
+  margin-top: 30px;
+  padding: 15px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #555;
 }
 
