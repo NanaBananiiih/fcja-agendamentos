@@ -1,20 +1,61 @@
-/* Paleta suave */
-:root{
-  --fcja-bg: #f6f8fb;
+/* Paleta */
+:root {
+  --fcja-bg: #f6f8fb;     /* fundo claro */
+  --fcja-red: #a11212;    /* vermelho do cabeçalho/botões */
+  --fcja-red-900: #8c0f0f;/* hover */
 }
 
-body{
+/* Base */
+body {
   background: var(--fcja-bg);
 }
 
-.card.info-card{
-  border-left: 4px solid #0d6efd;
+/* Cards informativos opcionais */
+.card.info-card {
+  border-left: 4px solid #771414;
 }
 
-.table > :not(caption) > * > *{
+/* Tabelas centralizadas verticalmente */
+.table :not(caption) > * > * {
   vertical-align: middle;
 }
 
-.navbar-brand{ letter-spacing: .2px; }
+/* Marca / título */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: .2px;
+  font-weight: 700;
+}
+
+/* Cabeçalho (navbar) */
 .navbar {
-    background-color: #7a1111 !important;
+  background-color: var(--fcja-red) !important;
+}
+
+/* Logo na navbar */
+.navbar-brand img {
+  height: 40px;        /* tamanho fixo agradável */
+  width: auto;
+  margin-right: 6px;
+}
+
+/* Botões primários no tom do cabeçalho */
+.btn-primary {
+  background-color: var(--fcja-red);
+  border-color: var(--fcja-red);
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--fcja-red-900);
+  border-color: var(--fcja-red-900);
+}
+
+/* Links */
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
