@@ -1,0 +1,32 @@
+<div class="col-md-6">
+  <label class="form-label">Nome *</label>
+  <input name="nome" type="text" class="form-control" required>
+</div>
+<div class="col-md-6">
+  <label class="form-label">Instituição *</label>
+  <input name="instituicao" type="text" class="form-control" required>
+</div>
+<div class="col-md-6">
+  <label class="form-label">E-mail *</label>
+  <input name="email" type="email" class="form-control" required>
+</div>
+<div class="col-md-6">
+  <label class="form-label">Telefone *</label>
+  <input name="telefone" type="tel" class="form-control" required pattern="[\d\(\)\-\s\+]{8,}">
+</div>
+<div class="col-md-4">
+  <label class="form-label">Data (AAAA-MM-DD) *</label>
+  <input name="data" type="date" class="form-control" required>
+</div>
+<div class="col-md-4">
+  <label class="form-label">Turno *</label>
+  <select name="turno" class="form-select" required>
+    <option value="">Selecione...</option>
+    <option>manhã</option>
+    <option>tarde</option>
+  </select>
+</div>
+<div class="col-12">
+  <label class="form-label">Tema / Observação</label>
+  <textarea name="observacao" class="form-control" rows="3"></textarea>
+</div>

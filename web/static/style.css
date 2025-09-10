@@ -1,0 +1,20 @@
+/* Paleta suave */
+:root{
+  --fcja-bg: #f6f8fb;
+}
+
+body{
+  background: var(--fcja-bg);
+}
+
+.card.info-card{
+  border-left: 4px solid #0d6efd;
+}
+
+.table > :not(caption) > * > *{
+  vertical-align: middle;
+}
+
+.navbar-brand{ letter-spacing: .2px; }
+.navbar {
+    background-color: #7a1111 !important;

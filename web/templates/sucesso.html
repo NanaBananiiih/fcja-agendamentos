@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Agendamento enviado{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+  <div class="display-6 mb-3">✅ Agendamento enviado!</div>
+  <p class="lead text-muted">Em breve entraremos em contato pelo e-mail informado.</p>
+  <div class="mt-4 d-flex gap-2 justify-content-center">
+    <a class="btn btn-primary" href="{{ url_for('index') }}">Voltar ao início</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('ultimos') }}">Ver últimos agendamentos</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Agendamentos FCJA{% endblock %}</title>
+    
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Fonte bonita (Google Fonts) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap (opcional, facilita MUITO) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">Agendamentos FCJA</a>
+  </div>
+</nav>
+
+    <!-- Conteúdo principal -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-3 bg-light border-top">
+        <p class="mb-0">&copy; {{ 2025 }} Fundação Casa de José Américo</p>
+    </footer>
+
+    <!-- Scripts do Bootstrap (se precisar JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
