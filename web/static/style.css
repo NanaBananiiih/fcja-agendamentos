@@ -1,8 +1,6 @@
-/* Paleta */
+/* Paleta suave */
 :root {
-  --fcja-bg: #f6f8fb;     /* fundo claro */
-  --fcja-red: #a11212;    /* vermelho do cabeçalho/botões */
-  --fcja-red-900: #8c0f0f;/* hover */
+  --fcja-bg: #f6f8fb;
 }
 
 /* Base */
@@ -10,52 +8,41 @@ body {
   background: var(--fcja-bg);
 }
 
-/* Cards informativos opcionais */
+/* Cards de informação */
 .card.info-card {
-  border-left: 4px solid #771414;
+  border-left: 4px solid #0d6efd;
 }
 
-/* Tabelas centralizadas verticalmente */
-.table :not(caption) > * > * {
+/* Ajustes em tabelas */
+.table > :not(caption) > * > * {
   vertical-align: middle;
 }
 
-/* Marca / título */
+/* Estilo do título da navbar */
 .navbar-brand {
+  letter-spacing: .2px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  letter-spacing: .2px;
-  font-weight: 700;
 }
 
-/* Cabeçalho (navbar) */
+/* Navbar vermelha */
 .navbar {
-  background-color: var(--fcja-red) !important;
+  background-color: #a50000 !important; /* vermelho forte */
 }
 
 /* Logo na navbar */
 .navbar-brand img {
-  height: 40px;        /* tamanho fixo agradável */
-  width: auto;
-  margin-right: 6px;
+  margin-right: 10px;
+  height: 40px; /* garante tamanho fixo */
 }
 
-/* Botões primários no tom do cabeçalho */
+/* Botões no tema */
 .btn-primary {
-  background-color: var(--fcja-red);
-  border-color: var(--fcja-red);
-}
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: var(--fcja-red-900);
-  border-color: var(--fcja-red-900);
+  background-color: #a50000;
+  border-color: #a50000;
 }
 
-/* Links */
-a {
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
+.btn-primary:hover {
+  background-color: #870000;
+  border-color: #870000;
 }
