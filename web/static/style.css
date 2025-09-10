@@ -1,62 +1,46 @@
-/* ===========================
-   Paleta suave
-=========================== */
+/* Paleta suave */
 :root {
   --fcja-bg: #f6f8fb;
 }
 
-/* ===========================
-   Base
-=========================== */
 body {
   background: var(--fcja-bg);
 }
 
-/* ===========================
-   Cards
-=========================== */
-.card.info-card {
-  border-left: 4px solid #0d6efd;
-}
-
-/* ===========================
-   Tabelas
-=========================== */
-.table > :not(caption) > * > * {
-  vertical-align: middle;
-}
-
-/* ===========================
-   Cabeçalho / Navbar
-=========================== */
+/* Cabeçalho vermelho */
 .navbar {
-  background-color: #7a1111 !important; /* vermelho institucional */
+  background-color: #7a1111 !important;
 }
 
 .navbar-brand {
-  letter-spacing: .2px;
-  display: flex;
-  align-items: center;
+  color: #fff !important;
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: .5px;
 }
 
-/* Logo na navbar */
 .navbar-brand img {
+  height: 40px;
   margin-right: 10px;
-  height: 40px;      /* tamanho fixo */
-  width: auto;       /* mantém proporção */
-  max-height: 50px;  /* limite extra */
 }
 
-/* ===========================
-   Botões customizados
-=========================== */
+/* Botões customizados em preto */
 .btn-custom {
-  background-color: #000;   /* preto */
+  background-color: #000;
   color: #fff;
   border: none;
 }
 
 .btn-custom:hover {
-  background-color: #333;   /* cinza escuro no hover */
+  background-color: #333;
   color: #fff;
+}
+
+/* Cartões */
+.card.info-card {
+  border-left: 4px solid #5e1212;
+}
+
+.table > :not(caption) > * > * {
+  vertical-align: middle;
 }
