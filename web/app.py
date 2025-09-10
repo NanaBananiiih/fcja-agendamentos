@@ -4,8 +4,10 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from database import init_db, get_connection
 from utils.validacoes import validar_email, validar_telefone, validar_data_visita, validar_data_pesquisa, normalizar_turno
 app = Flask(__name__); app.config['SECRET_KEY']='fcja-secret'
-@app.before_first_request
-def setup(): init_db()
+@app.before_request
+def inicializar():
+    print("Rodando inicialização ao iniciar o app")
+inicializar()
 @app.get('/')
 def index(): return render_template('index.html')
 @app.get('/agendar/<tipo>')
