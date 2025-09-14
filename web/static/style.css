@@ -1,7 +1,8 @@
 /* Paleta suave */
 :root {
   --fcja-bg: #f6f8fb;
-  --fcja-red: #b22222; /* vermelho vivo */
+  --fcja-red: #b22222;   /* vermelho padrão */
+  --fcja-red-dark: #8b0000; /* vermelho escuro (hover) */
 }
 
 body {
@@ -14,36 +15,36 @@ body {
 }
 
 .navbar-brand {
-  color: #fffcfc !important;
+  color: #fff !important;
   font-weight: bold;
   font-size: 1.2rem;
   letter-spacing: .5px;
 }
 
 .navbar-brand img {
-  height: 35px;   /* menor que o atual */
+  height: 35px;
   margin-right: 8px;
 }
 
 /* Botões customizados */
 .btn-custom {
-  background-color: #b22222; /* vermelho tomate escuro */
-  color: #fffcfc;
+  background-color: var(--fcja-red);
+  color: #fff;                /* cor da fonte dentro do botão */
   border: none;
-  border-radius: 6px; /* bordas arredondadas */
-  padding: 8px 18px;  /* espaçamento interno */
+  border-radius: 6px;         /* bordas arredondadas */
+  padding: 8px 18px;          /* espaçamento interno */
   font-weight: 500;
   transition: background-color 0.3s ease;
 }
 
 .btn-custom:hover {
-  background-color: #8b0000; /* vermelho mais escuro no hover */
-  color: #fffcfc;
+  background-color: var(--fcja-red-dark); /* vermelho mais escuro no hover */
+  color: #fff;
 }
 
 /* Cartões */
 .card.info-card {
-  border-left: 4px solid #8b0000;
+  border-left: 4px solid var(--fcja-red-dark);
 }
 
 .table > :not(caption) > * > * {
