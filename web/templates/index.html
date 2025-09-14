@@ -8,14 +8,14 @@
       <div class="card-body p-4">
         <h1 class="h4 mb-4 text-center">Agendar Visita</h1>
         <div class="d-flex justify-content-center gap-2 mb-4">
-          <a class="btn btn-custom" href="{{ url_for('agendar', tipo='visitante') }}">Visitante</a>
-          <a class="btn btn-custom" href="{{ url_for('agendar', tipo='escola') }}">Escola</a>
-          <a class="btn btn-custom" href="{{ url_for('agendar', tipo='ies') }}">IES</a>
+          <a class="btn btn-custom" href="{{ url_for('agendar_form', tipo='visitante') }}">Visitante</a>
+          <a class="btn btn-custom" href="{{ url_for('agendar_form', tipo='escola') }}">Escola</a>
+          <a class="btn btn-custom" href="{{ url_for('agendar_form', tipo='ies') }}">IES</a>
         </div>
 
         <h2 class="h5 mb-3">Pesquisa</h2>
         <div class="d-flex justify-content-center">
-          <a class="btn btn-custom w-100" href="{{ url_for('agendar', tipo='pesquisador') }}">Pesquisador</a>
+          <a class="btn btn-custom w-100" href="{{ url_for('agendar_form', tipo='pesquisador') }}">Pesquisador</a>
         </div>
 
         <div class="text-center mt-3">
