@@ -1,7 +1,6 @@
 /* Paleta suave */
 :root {
   --fcja-bg: #f6f8fb;
-  --fcja-red: #b22222; /* vermelho mais vivo */
 }
 
 body {
@@ -10,7 +9,7 @@ body {
 
 /* Cabeçalho vermelho */
 .navbar {
-  background-color: var(--fcja-red) !important;
+  background-color: #b22222 !important; /* vermelho vivo */
 }
 
 .navbar-brand {
@@ -21,31 +20,24 @@ body {
 }
 
 .navbar-brand img {
-  height: 35px;   /* menor que o atual */
+  height: 35px;   /* tamanho reduzido da logo */
   margin-right: 8px;
 }
 
-/* Botões customizados (vermelhos como o cabeçalho) */
+/* Botões customizados */
 .btn-custom {
-  background-color: var(--fcja-red);
-  color: #fff;
+  background-color: #b22222; /* vermelho do cabeçalho */
+  color: #fff !important;   /* fonte branca */
   border: none;
-  border-radius: 6px;  /* cantos arredondados como na imagem */
-  padding: 8px 20px;
-  font-weight: 500;
-  transition: background-color 0.2s ease-in-out;
+  border-radius: 6px;       /* cantos arredondados */
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .btn-custom:hover {
-  background-color: #8b1a1a; /* vermelho mais escuro no hover */
-  color: #fff;
-}
-
-/* Botão largura total (ex: Pesquisador) */
-.btn-custom.w-100 {
-  display: block;
-  width: 100%;
-  text-align: center;
+  background-color: #8b0000; /* vermelho mais escuro no hover */
+  color: #fff !important;
 }
 
 /* Cartões */
