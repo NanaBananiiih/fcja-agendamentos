@@ -26,24 +26,6 @@ body {
   margin-right: 8px;
 }
 
-/* Botões customizados */
-.btn-custom {
-  background-color: var(--fcja-red);   /* fundo vermelho */
-  color: #fff;                         /* texto branco */
-  border: 2px solid var(--fcja-red);   /* borda igual ao fundo */
-  border-radius: 6px;                  /* bordas arredondadas */
-  padding: 8px 18px;                   /* espaçamento interno */
-  font-weight: 500;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Hover */
-.btn-custom:hover {
-  background-color: var(--fcja-red-dark); /* fundo vermelho mais escuro */
-  border-color: var(--fcja-red-dark);     /* borda acompanha fundo */
-  color: #fff;                            /* mantém texto branco */
-}
-
 /* Cartões */
 .card.info-card {
   border-left: 4px solid var(--fcja-red-dark);
