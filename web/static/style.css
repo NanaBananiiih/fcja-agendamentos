@@ -9,7 +9,7 @@ body {
 
 /* Cabeçalho vermelho */
 .navbar {
-  background-color: #7c0d0d !important;
+  background-color: #b22222 !important; /* vermelho mais vivo */
 }
 
 .navbar-brand {
@@ -20,11 +20,11 @@ body {
 }
 
 .navbar-brand img {
-  height: 40px;
-  margin-right: 10px;
+  height: 35px;   /* menor que o atual */
+  margin-right: 8px;
 }
 
-/* Botões customizados em preto */
+/* Botões customizados */
 .btn-custom {
   background-color: #000;
   color: #fff;
@@ -38,7 +38,7 @@ body {
 
 /* Cartões */
 .card.info-card {
-  border-left: 4px solid #5e1212;
+  border-left: 4px solid #8b0000;
 }
 
 .table > :not(caption) > * > * {
