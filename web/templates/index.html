@@ -6,29 +6,19 @@
   <div class="col-12 col-lg-8">
     <div class="card shadow-sm">
       <div class="card-body p-4">
-        <h1 class="h4 mb-4 text-center">Agendamentos FCJA</h1>
-
-        <!-- Agendar Visita -->
-        <div class="mb-4">
-          <h5>Agendar Visita</h5>
-          <div class="d-flex gap-2 flex-wrap">
-          <a href="{{ url_for('agendar_form', tipo='visitante') }}" class="btn btn-custom">Visitante</a>
-<a href="{{ url_for('agendar_form', tipo='escola') }}" class="btn btn-custom">Escola</a>
-<a href="{{ url_for('agendar_form', tipo='ies') }}" class="btn btn-custom">IES</a>
-<a href="{{ url_for('agendar_form', tipo='pesquisador') }}" class="btn btn-custom">Pesquisador</a>
-          </div>
+        <h1 class="h4 mb-4 text-center">Agendar Visita</h1>
+        <div class="d-flex justify-content-center gap-2 mb-4">
+          <a class="btn btn-custom" href="{{ url_for('agendar', tipo='visitante') }}">Visitante</a>
+          <a class="btn btn-custom" href="{{ url_for('agendar', tipo='escola') }}">Escola</a>
+          <a class="btn btn-custom" href="{{ url_for('agendar', tipo='ies') }}">IES</a>
         </div>
 
-        <!-- Pesquisa -->
-        <div class="mb-4">
-          <h5>Pesquisa</h5>
-          <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ url_for('agendar_form', tipo='pesquisador') }}" class="btn btn-custom">Pesquisador</a>
-          </div>
+        <h2 class="h5 mb-3">Pesquisa</h2>
+        <div class="d-flex justify-content-center">
+          <a class="btn btn-custom w-100" href="{{ url_for('agendar', tipo='pesquisador') }}">Pesquisador</a>
         </div>
 
-        <!-- Últimos agendamentos -->
-        <div class="text-center">
+        <div class="text-center mt-3">
           <a href="{{ url_for('ultimos') }}">Ver últimos agendamentos</a>
         </div>
       </div>
