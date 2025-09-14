@@ -1,6 +1,7 @@
 /* Paleta suave */
 :root {
   --fcja-bg: #f6f8fb;
+  --fcja-red: #b22222; /* vermelho mais vivo */
 }
 
 body {
@@ -9,7 +10,7 @@ body {
 
 /* Cabeçalho vermelho */
 .navbar {
-  background-color: #b22222 !important; /* vermelho mais vivo */
+  background-color: var(--fcja-red) !important;
 }
 
 .navbar-brand {
@@ -24,16 +25,27 @@ body {
   margin-right: 8px;
 }
 
-/* Botões customizados */
+/* Botões customizados (vermelhos como o cabeçalho) */
 .btn-custom {
-  background-color: #000;
+  background-color: var(--fcja-red);
   color: #fff;
   border: none;
+  border-radius: 6px;  /* cantos arredondados como na imagem */
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .btn-custom:hover {
-  background-color: #333;
+  background-color: #8b1a1a; /* vermelho mais escuro no hover */
   color: #fff;
+}
+
+/* Botão largura total (ex: Pesquisador) */
+.btn-custom.w-100 {
+  display: block;
+  width: 100%;
+  text-align: center;
 }
 
 /* Cartões */
