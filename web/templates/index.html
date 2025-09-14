@@ -6,18 +6,17 @@
   <div class="col-12 col-lg-8">
     <div class="card shadow-sm">
       <div class="card-body p-4">
-        <h1 class="h4 mb-4 text-center">Agendar Visita</h1>
+        <h1 class="h4 mb-4 text-center">Agendar visita:</h1>
+
+        <!-- Botões de agendamento -->
         <div class="d-flex justify-content-center gap-2 mb-4">
           <a class="btn btn-custom" href="{{ url_for('agendar_form', tipo='visitante') }}">Visitante</a>
           <a class="btn btn-custom" href="{{ url_for('agendar_form', tipo='escola') }}">Escola</a>
           <a class="btn btn-custom" href="{{ url_for('agendar_form', tipo='ies') }}">IES</a>
+          <a class="btn btn-custom" href="{{ url_for('agendar_form', tipo='pesquisador') }}">Pesquisador</a>
         </div>
 
-        <h2 class="h5 mb-3">Pesquisa</h2>
-        <div class="d-flex justify-content-center">
-          <a class="btn btn-custom w-100" href="{{ url_for('agendar_form', tipo='pesquisador') }}">Pesquisador</a>
-        </div>
-
+        <!-- Link para últimos agendamentos -->
         <div class="text-center mt-3">
           <a href="{{ url_for('ultimos') }}">Ver últimos agendamentos</a>
         </div>
