@@ -36,7 +36,7 @@ body {
 
 .btn-custom {
   background-color: var(--fcja-red);
-  color: #fff;
+  color: #b22222;
   border: none;
   border-radius: 6px;
   padding: 10px 0;         /* altura fixa */
@@ -48,7 +48,7 @@ body {
 
 .btn-custom:hover {
   background-color: var(--fcja-red-dark);
-  color: #fff;
+  color: #b22222;
 }
 
 /* Cartões */
