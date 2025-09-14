@@ -14,7 +14,7 @@ body {
 }
 
 .navbar-brand {
-  color: #fff !important;
+  color: #fffcfc !important;
   font-weight: bold;
   font-size: 1.2rem;
   letter-spacing: .5px;
@@ -27,8 +27,8 @@ body {
 
 /* Botões customizados */
 .btn-custom {
-  background-color: var(--fcja-red);
-  color: #fff;
+  background-color: #b22222; /* vermelho tomate escuro */
+  color: #fffcfc;
   border: none;
   border-radius: 6px; /* bordas arredondadas */
   padding: 8px 18px;  /* espaçamento interno */
@@ -38,7 +38,7 @@ body {
 
 .btn-custom:hover {
   background-color: #8b0000; /* vermelho mais escuro no hover */
-  color: #fff;
+  color: #fffcfc;
 }
 
 /* Cartões */
