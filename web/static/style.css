@@ -1,8 +1,8 @@
 /* Paleta suave */
 :root {
   --fcja-bg: #f6f8fb;
-  --fcja-red: #b22222;
-  --fcja-red-dark: #8b0000;
+  --fcja-red: #b22222;   /* vermelho padrão */
+  --fcja-red-dark: #8b0000; /* vermelho mais escuro no hover */
 }
 
 body {
@@ -26,29 +26,22 @@ body {
   margin-right: 8px;
 }
 
-/* Botões - mesma largura */
-.d-flex.gap-2, 
-.d-flex.justify-content-center {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
-
+/* Botões customizados */
 .btn-custom {
-  background-color: var(--fcja-red);
-  color: #b22222;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 0;         /* altura fixa */
-  font-weight: 600;
-  text-align: center;
-  transition: background-color 0.3s ease;
-  flex: 1;                 /* todos os botões iguais */
+  background-color: var(--fcja-red);   /* fundo vermelho */
+  color: #fff;                         /* texto branco */
+  border: 2px solid var(--fcja-red);   /* borda igual ao fundo */
+  border-radius: 6px;                  /* bordas arredondadas */
+  padding: 8px 18px;                   /* espaçamento interno */
+  font-weight: 500;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
+/* Hover */
 .btn-custom:hover {
-  background-color: var(--fcja-red-dark);
-  color: #b22222;
+  background-color: var(--fcja-red-dark); /* fundo vermelho mais escuro */
+  border-color: var(--fcja-red-dark);     /* borda acompanha fundo */
+  color: #fff;                            /* mantém texto branco */
 }
 
 /* Cartões */
