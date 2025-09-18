@@ -1,41 +1,61 @@
 import re
 from datetime import datetime
 
-DATE_FMT_1 = "%Y-%m-%d"   # 2025-09-18
-DATE_FMT_2 = "%d/%m/%Y"   # 18/09/2025
+# Formato padrão das datas (YYYY-MM-DD, vindo do input type="date")
+DATE_FMT = "%Y-%m-%d"
 
-def _parse_any(s: str):
-    s = (s or "").strip()
-    for fmt in (DATE_FMT_1, DATE_FMT_2):
-        try:
-            return datetime.strptime(s, fmt)
-        except Exception:
-            pass
-    raise ValueError("formato de data inválido")
+def _parse(s: str):
+    """Converte string em datetime.date no formato padrão."""
+    return datetime.strptime(s, DATE_FMT)
 
-def validar_data_visita(s):
-    """Visitas: terça(1) a domingo(6). Segunda(0) não."""
+# ---------- Validações de data ----------
+def validar_data_visita(s: str) -> bool:
+    """
+    Visitas: terça a domingo (09:00 - 16:00).
+    Segunda-feira é fechado.
+    """
     try:
-        return _parse_any(s).weekday() in [1,2,3,4,5,6]
+        d = _parse(s)
+        # weekday(): segunda=0, terça=1 ... domingo=6
+        return d.weekday() in [1, 2, 3, 4, 5, 6]  # terça a domingo
     except Exception:
         return False
 
-def validar_data_pesquisa(s):
-    """Pesquisa: segunda(0) a sexta(4)."""
+def validar_data_pesquisa(s: str) -> bool:
+    """
+    Pesquisas: segunda a sexta (09:00 - 16:00).
+    Sábado e domingo não funcionam.
+    """
     try:
-        return _parse_any(s).weekday() in [0,1,2,3,4]
+        d = _parse(s)
+        return d.weekday() in [0, 1, 2, 3, 4]  # segunda a sexta
     except Exception:
         return False
 
-def validar_email(e):
+# ---------- Validações de contato ----------
+def validar_email(e: str) -> bool:
+    """Valida formato de e-mail simples."""
     return re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", e or "") is not None
 
-def validar_telefone(t):
-    # aceita (83) 99999-9999, 83999999999, 9999-9999 (com DDD)
+def validar_telefone(t: str) -> bool:
+    """
+    Valida telefones no formato brasileiro:
+    - (83) 99999-8888
+    - 83 99999-8888
+    - 83999998888
+    """
     return re.fullmatch(r"\(?\d{2}\)?\s?\d{4,5}-?\d{4}", t or "") is not None
 
-def normalizar_turno(turno):
+# ---------- Normalização ----------
+def normalizar_turno(turno: str) -> str | None:
+    """
+    Normaliza o turno informado pelo usuário.
+    Aceita: manhã / manha, tarde.
+    Retorna 'manhã' ou 'tarde'.
+    """
     t = (turno or "").strip().lower()
-    if t in {"manha", "manhã"}: return "manhã"
-    if t == "tarde": return "tarde"
+    if t in {"manha", "manhã"}:
+        return "manhã"
+    if t == "tarde":
+        return "tarde"
     return None
