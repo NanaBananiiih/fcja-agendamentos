@@ -1,7 +1,7 @@
 # web/app.py
 from flask import Flask, render_template, request, redirect, url_for, flash
 import os, sys
-from datetime import datetime, date   # importa também "date"
+from datetime import datetime, date
 
 # permite importar database.py que está fora da pasta web/
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -72,26 +72,37 @@ def agendar_submit(tipo):
         flash('Tipo inválido','danger')
         return redirect(url_for('index'))
 
+    print("=== POST agendar ===")
+    print("tipo:", tipo)
+    print("form:", dict(request.form))
+
     data = request.form.to_dict()
     turno = normalizar_turno(data.get('turno'))
-    data_str = data.get('data','').strip()
+    data_str = (data.get('data') or '').strip()
     d = _parse_date(data_str)
+    print("normalizado turno:", turno, "| data_str:", data_str, "| parsed:", d)
 
     if not turno:
+        print("FAIL: turno inválido")
         flash('Turno inválido','danger'); return redirect(request.url)
     if not d:
+        print("FAIL: data inválida")
         flash('Data inválida','danger'); return redirect(request.url)
 
     if tipo in {'visitante','escola','ies'}:
         if not validar_data_visita(data_str):
+            print("FAIL: validar_data_visita")
             flash('Data inválida (visita)','danger'); return redirect(request.url)
     else:
         if not validar_data_pesquisa(data_str):
+            print("FAIL: validar_data_pesquisa")
             flash('Data inválida (pesquisa)','danger'); return redirect(request.url)
 
     if not validar_email(data.get('email','')):
+        print("FAIL: email inválido")
         flash('E-mail inválido','danger'); return redirect(request.url)
     if not validar_telefone(data.get('telefone','')):
+        print("FAIL: telefone inválido")
         flash('Telefone inválido','danger'); return redirect(request.url)
 
     try:
@@ -195,10 +206,10 @@ def ultimos():
         with conn.cursor() as cur:
             for t in ['visitante','escola','ies','pesquisador']:
                 cur.execute(f"SELECT * FROM {t} ORDER BY id DESC LIMIT 5")
-                dados[t] = cur.fetchall()  # RealDictCursor => lista de dicts
+                dados[t] = cur.fetchall()
     return render_template('ultimos.html', dados=dados)
 
-# (opcional) diagnóstico temporário — remova depois
+# (opcional) diagnóstico temporário
 @app.get('/diag')
 def diag():
     key = request.args.get("key")
@@ -206,13 +217,13 @@ def diag():
         return "forbidden", 403
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT current_database(), inet_server_addr(), inet_server_port()")
-            db, host, port = cur.fetchone().values()
+            cur.execute("SELECT current_database() AS db, inet_server_addr() AS host, inet_server_port() AS port")
+            row = cur.fetchone()
             def count(t):
                 cur.execute(f"SELECT COUNT(*) AS c FROM {t}")
                 return cur.fetchone()["c"]
             return {
-                "db": db, "host": str(host), "port": port,
+                "db": row["db"], "host": str(row["host"]), "port": row["port"],
                 "visitante": count("visitante"),
                 "escola": count("escola"),
                 "ies": count("ies"),
