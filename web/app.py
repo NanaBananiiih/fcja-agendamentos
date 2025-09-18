@@ -190,8 +190,11 @@ def agendar_submit(tipo):
                             data.get('observacao'),
                         )
                     )
-                new_id = cur.fetchone()[0]
+
+                row = cur.fetchone()          # ✅ retorna dict (RealDictCursor)
+                new_id = (row or {}).get("id")
                 print(f"INSERT OK: tipo={tipo} id={new_id}")
+
         flash('Agendamento enviado com sucesso!','success')
     except Exception as e:
         print("ERRO INSERT:", repr(e))
