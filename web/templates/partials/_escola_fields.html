@@ -18,7 +18,13 @@
 
 <div class="col-md-6">
   <label class="form-label">Telefone *</label>
-  <input name="telefone" type="tel" class="form-control" required pattern="[\d\(\)\-\s\+]{8,}">
+  <input 
+      name="telefone" 
+      type="tel" 
+      class="form-control" 
+      placeholder="DDD + número (somente dígitos)" 
+      required 
+      pattern="[\d\(\)\-\s\+]{8,}">
   <div class="invalid-feedback">Telefone inválido.</div>
 </div>
 
