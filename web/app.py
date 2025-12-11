@@ -7,8 +7,17 @@ from typing import Dict, Any, Optional
 # permite importar database.py que está fora da pasta web/
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-# Mantemos init_db() + get_connection() para operações admin / fallback
-from database import init_db, get_connection
+# Mantemos init_db() + get_connection() para operações admin / fallback (podem lançar se não configurados)
+try:
+    from database import init_db, get_connection
+except Exception:
+    # se não existirem, definimos stubs que levantam quando chamados
+    def init_db():
+        raise RuntimeError("init_db indisponível (DATABASE_URL/psycopg2 não configurados).")
+
+    def get_connection():
+        raise RuntimeError("get_connection indisponível (DATABASE_URL/psycopg2 não configurados).")
+
 # Funções de runtime que usam Supabase (inserções / consultas)
 from database import (
     insert_visitante, insert_escola, insert_ies, insert_pesquisador,
@@ -16,7 +25,11 @@ from database import (
 )
 
 # Importa supabase client para consultas genéricas (ultimos registros)
-from supabase_client import supabase
+# supabase_client.py deve existir e usar SUPABASE_URL+SUPABASE_ANON_KEY no .env
+try:
+    from supabase_client import supabase
+except Exception:
+    supabase = None  # será tratado em runtime
 
 from utils.validacoes import (
     validar_email, validar_telefone,
@@ -48,6 +61,13 @@ def _parse_date(d: str) -> Optional[date]:
     except Exception:
         return None
 
+def safe_int(value, default=0):
+    """Converte em int com fallback sem lançar exceção."""
+    try:
+        return int(value)
+    except Exception:
+        return default
+
 # ---------- inicialização (compatível Flask 3) ----------
 _boot_done = False
 
@@ -59,12 +79,14 @@ def _boot_once():
         return
     _boot_done = True
     print("Rodando inicialização ao iniciar o app")
-    print("DATABASE_URL:", _mask_url(os.getenv("DATABASE_URL", "")))
+    # imprime info limitada (não vaza senha)
+    print("DATABASE_URL (masked):", _mask_url(os.getenv("DATABASE_URL", "")))
     try:
         init_db()
         print("init_db: ok")
     except Exception as e:
-        print("init_db erro:", repr(e))
+        # Não falhar a inicialização — pode ser que você esteja usando apenas Supabase (sem DATABASE_URL)
+        print("init_db erro (ignorado):", repr(e))
 
 # ---------- rotas ----------
 @app.get('/')
@@ -119,15 +141,17 @@ def agendar_submit(tipo):
     try:
         # usa as funções do database.py que invocam supabase (runtime)
         novo: Optional[Dict[str, Any]] = None
+        payload = {}
 
         if tipo == 'visitante':
+            qtd = safe_int(data.get('qtd_pessoas'), 1)
             payload = {
                 "nome": data.get('nome'),
                 "genero": data.get('genero'),
                 "email": data.get('email'),
                 "telefone": data.get('telefone'),
                 "endereco": data.get('endereco'),
-                "qtd_pessoas": int(data.get('qtd_pessoas') or 1),
+                "qtd_pessoas": qtd,
                 "data": d.isoformat(),
                 "turno": turno,
                 "tempo_estimado": data.get('tempo_estimado'),
@@ -136,13 +160,14 @@ def agendar_submit(tipo):
             novo = insert_visitante(payload)
 
         elif tipo == 'escola':
+            num_alunos = safe_int(data.get('num_alunos'), 0)
             payload = {
                 "nome_escola": data.get('nome_escola'),
                 "representante": data.get('representante'),
                 "email": data.get('email'),
                 "telefone": data.get('telefone'),
                 "endereco": data.get('endereco'),
-                "num_alunos": int(data.get('num_alunos') or 0),
+                "num_alunos": num_alunos,
                 "data": d.isoformat(),
                 "turno": turno,
                 "observacao": data.get('observacao'),
@@ -150,13 +175,14 @@ def agendar_submit(tipo):
             novo = insert_escola(payload)
 
         elif tipo == 'ies':
+            num_alunos = safe_int(data.get('num_alunos'), 0)
             payload = {
                 "nome_ies": data.get('nome_ies'),
                 "representante": data.get('representante'),
                 "email": data.get('email'),
                 "telefone": data.get('telefone'),
                 "endereco": data.get('endereco'),
-                "num_alunos": int(data.get('num_alunos') or 0),
+                "num_alunos": num_alunos,
                 "data": d.isoformat(),
                 "turno": turno,
                 "observacao": data.get('observacao'),
@@ -180,7 +206,7 @@ def agendar_submit(tipo):
 
         if novo:
             nid = novo.get("id") if isinstance(novo, dict) else None
-            print(f"INSERT OK (supabase): tipo={tipo} id={nid} payload={payload}")
+            print(f"INSERT OK (supabase): tipo={tipo} id={nid} payload_keys={list(payload.keys())}")
             flash('Agendamento enviado com sucesso!','success')
         else:
             # resposta vazia ou erro tratado dentro das funções insert_*
@@ -196,21 +222,27 @@ def agendar_submit(tipo):
 @app.get('/ultimos')
 def ultimos():
     dados: Dict[str, Any] = {}
+
     # Primeiro tentamos via Supabase (runtime)
-    for t in ['visitante','escola','ies','pesquisador']:
-        try:
-            resp = supabase.table(t).select("*").order("id", desc=True).limit(5).execute()
-            dados[t] = resp.data or []
-        except Exception as e:
-            print(f"Supabase fetch failed for {t}: {e}")
-            # fallback para psycopg2
+    if supabase is not None:
+        for t in ['visitante','escola','ies','pesquisador']:
+            try:
+                resp = supabase.table(t).select("*").order("id", desc=True).limit(5).execute()
+                dados[t] = resp.data or []
+            except Exception as e:
+                print(f"Supabase fetch failed for {t}: {e}")
+                dados[t] = []
+    else:
+        # Supabase client indisponível — tentamos fallback via get_connection (se disponível)
+        print("supabase client indisponível; tentando fallback via get_connection()")
+        for t in ['visitante','escola','ies','pesquisador']:
             try:
                 with get_connection() as conn:
                     with conn.cursor() as cur:
                         cur.execute(f"SELECT * FROM {t} ORDER BY id DESC LIMIT 5")
                         dados[t] = cur.fetchall()
-            except Exception as e2:
-                print(f"Fallback psycopg2 also failed for {t}: {e2}")
+            except Exception as e:
+                print(f"Fallback psycopg2 failed for {t}: {e}")
                 dados[t] = []
 
     return render_template('ultimos.html', dados=dados)

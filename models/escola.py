@@ -1,69 +1,56 @@
-from utils.validacoes import (
-    validar_email, validar_telefone,
-    validar_data_visita, normalizar_turno
-)
+# models/escola.py
+from typing import Tuple, List, Dict, Any, Optional
+from database import get_connection
+from utils.validacoes import validar_email, validar_telefone, validar_data_visita, normalizar_turno
 
-from database import insert_escola   # função que usa Supabase
-from supabase_client import supabase  # cliente supabase
-
-
-def cadastrar_escola(data):
-    # --- validações ---
-    if not validar_email(data.get('email','')):
+def cadastrar_escola(data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """
+    Insere um agendamento do tipo escola. Retorna o registro inserido (dict) ou None.
+    """
+    if not validar_email(data.get('email','')): 
         raise ValueError('E-mail inválido')
-
-    if not validar_telefone(data.get('telefone','')):
+    if not validar_telefone(data.get('telefone','')): 
         raise ValueError('Telefone inválido')
-
-    if not validar_data_visita(data.get('data','')):
+    if not validar_data_visita(data.get('data','')): 
         raise ValueError('Data inválida (terça-dom)')
-
-    turno = normalizar_turno(data.get('turno',''))
-    if not turno:
+    t = normalizar_turno(data.get('turno',''))
+    if not t:
         raise ValueError('Turno inválido')
 
-    # --- monta payload para supabase ---
-    payload = {
-        "nome_escola": data.get("nome_escola"),
-        "representante": data.get("representante"),
-        "email": data.get("email"),
-        "telefone": data.get("telefone"),
-        "endereco": data.get("endereco"),
-        "num_alunos": int(data.get("num_alunos") or 0),
-        "data": data.get("data"),  # Supabase aceita 'YYYY-MM-DD'
-        "turno": turno,
-        "observacao": data.get("observacao"),
-    }
-
-    novo = insert_escola(payload)
-    if not novo:
-        raise RuntimeError("Falha ao inserir registro no Supabase.")
-
-    return novo   # retorna o registro recém-criado
-
-
-def listar(limit=50):
-    """Lista registros de 'escola' usando Supabase"""
+    conn = get_connection()
     try:
-        resp = (
-            supabase.table("escola")
-            .select("*")
-            .order("id", desc=True)
-            .limit(limit)
-            .execute()
-        )
-        dados = resp.data or []
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO escola
+                  (nome_escola, representante, email, telefone, endereco, num_alunos, data, turno, observacao)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                RETURNING *
+                """,
+                (
+                    data.get('nome_escola'),
+                    data.get('representante'),
+                    data.get('email'),
+                    data.get('telefone'),
+                    data.get('endereco'),
+                    int(data.get('num_alunos') or 0),
+                    data.get('data'),
+                    t,
+                    data.get('observacao'),
+                )
+            )
+            row = cur.fetchone()
+            conn.commit()
+            return row
+    finally:
+        conn.close()
 
-        if dados:
-            cols = list(dados[0].keys())
-        else:
-            cols = []
-
-        # transforma em lista de tuplas para manter compatibilidade antiga
-        rows = [tuple(item[col] for col in cols) for item in dados]
-
-        return cols, rows
-
-    except Exception as e:
-        print("Erro ao listar escolas:", e)
-        return [], []
+def listar(limit: int = 50) -> List[Dict[str, Any]]:
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM escola ORDER BY id DESC LIMIT %s", (limit,))
+            rows = cur.fetchall()
+            return rows or []
+    finally:
+        conn.close()

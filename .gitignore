@@ -4,4 +4,4 @@ __pycache__/
 *.log
 *.csv
 *.db
-.env
+.env.env

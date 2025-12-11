@@ -1,16 +1,14 @@
-# Banco de dados
+# Banco (opcional no runtime: só precisa se for usar get_connection()/init_db)
 psycopg2-binary==2.9.10
 python-dotenv==1.0.1
 
-# Supabase (versões compatíveis modernas)
+# Supabase (versão estável compatível com dependências)
 supabase==2.25.0
-supabase-auth==2.25.0
-supabase-functions==2.25.0
 
 # Interface gráfica
 ttkbootstrap==1.7.3
 tkcalendar==1.6.1
-pillow==9.5.0
+Pillow==9.5.0
 
 # Web (Flask)
 Flask==3.0.3
