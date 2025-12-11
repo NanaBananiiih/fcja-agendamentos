@@ -1,54 +1,79 @@
 {# partial: campos para agendamento IES #}
+
 <div class="col-12">
-  <label for="nome_ies" class="form-label">Nome da IES</label>
+  <label for="nome_ies" class="form-label">Nome da IES *</label>
   <input type="text" class="form-control" id="nome_ies" name="nome_ies" required>
   <div class="invalid-feedback">Informe o nome da IES.</div>
 </div>
 
 <div class="col-md-6">
-  <label for="representante" class="form-label">Representante</label>
-  {# CORREÇÃO: name deve ser "representante" (antes estava responsavel) #}
+  <label for="representante" class="form-label">Representante *</label>
   <input type="text" class="form-control" id="representante" name="representante" required>
   <div class="invalid-feedback">Informe o nome do representante.</div>
 </div>
 
 <div class="col-md-6">
-  <label for="email" class="form-label">E-mail</label>
+  <label for="email" class="form-label">E-mail *</label>
   <input type="email" class="form-control" id="email" name="email" required>
   <div class="invalid-feedback">Informe um e-mail válido.</div>
 </div>
 
 <div class="col-md-6">
-  <label for="telefone" class="form-label">Telefone</label>
-  <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="DDD + número (somente dígitos)" required>
-  <div class="invalid-feedback">Informe um telefone válido (somente dígitos).</div>
+  <label for="telefone" class="form-label">Telefone *</label>
+  <input 
+      type="tel" 
+      class="form-control" 
+      id="telefone" 
+      name="telefone" 
+      placeholder="DDD + número (somente dígitos)" 
+      required>
+  <div class="invalid-feedback">Informe um telefone válido.</div>
 </div>
 
 <div class="col-md-6">
   <label for="endereco" class="form-label">Endereço</label>
-  <input type="text" class="form-control" id="endereco" name="endereco" required>
-  <div class="invalid-feedback">Informe o endereço.</div>
+  <input type="text" class="form-control" id="endereco" name="endereco">
 </div>
 
 <div class="col-md-4">
-  <label for="num_alunos" class="form-label">Número de alunos</label>
-  <input type="number" class="form-control" id="num_alunos" name="num_alunos" min="0" value="0">
+  <label for="num_alunos" class="form-label">Número de alunos *</label>
+  <input type="number" class="form-control" id="num_alunos" name="num_alunos" min="0" value="0" required>
 </div>
 
 <div class="col-md-4">
-  <label for="data" class="form-label">Data</label>
+  <label for="data" class="form-label">Data *</label>
   <input type="date" class="form-control" id="data" name="data" required>
   <div class="invalid-feedback">Informe uma data válida.</div>
 </div>
 
 <div class="col-md-4">
-  <label for="turno" class="form-label">Turno</label>
+  <label for="turno" class="form-label">Turno *</label>
   <select class="form-select" id="turno" name="turno" required>
     <option value="">Selecione...</option>
-    <option value="manha">Manhã</option>
-    <option value="tarde">Tarde</option>
+    <option value="manha">manhã</option>
+    <option value="tarde">tarde</option>
   </select>
   <div class="invalid-feedback">Selecione o turno.</div>
+</div>
+
+<div class="col-md-4">
+  <label class="form-label">Horário de chegada *</label>
+  <input type="time" name="horario_chegada" class="form-control" required>
+  <div class="invalid-feedback">Informe o horário de chegada.</div>
+</div>
+
+<div class="col-md-8">
+  <label class="form-label">Duração da visita (opcional)</label>
+  <input 
+      name="duracao" 
+      type="text" 
+      class="form-control" 
+      placeholder="ex: 1h30, 2h, 45 min">
+</div>
+
+<div class="col-12">
+  <label for="observacao" class="form-label">Observações</label>
+  <textarea class="form-control" id="observacao" name="observacao" rows="3"></textarea>
 </div>
 
 <div class="col-12">

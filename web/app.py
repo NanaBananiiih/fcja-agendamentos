@@ -113,9 +113,11 @@ def agendar_submit(tipo):
     data = request.form.to_dict()
     turno = normalizar_turno(data.get('turno'))
     data_str = (data.get('data') or '').strip()
+    horario_chegada = data.get("horario_chegada")
+    duracao = data.get("duracao")  # opcional
     d = _parse_date(data_str)
 
-    print("normalizado turno:", turno, "| data_str:", data_str, "| parsed:", d)
+    print("turno:", turno, "| data:", d, "| chegada:", horario_chegada)
 
     if not turno:
         flash('Turno inválido', 'danger')
@@ -142,13 +144,17 @@ def agendar_submit(tipo):
         flash('Telefone inválido', 'danger')
         return redirect(request.url)
 
+    if not horario_chegada:
+        flash("Informe o horário de chegada.", "danger")
+        return redirect(request.url)
+
     try:
         payload = {}
         novo: Optional[Dict[str, Any]] = None
 
-        # ---------------------------------------------------------
+        # ------------------------------------------
         # VISITANTE
-        # ---------------------------------------------------------
+        # ------------------------------------------
         if tipo == 'visitante':
             qtd = safe_int(data.get('qtd_pessoas'), 1)
             payload = {
@@ -160,14 +166,15 @@ def agendar_submit(tipo):
                 "qtd_pessoas": qtd,
                 "data": d.isoformat(),
                 "turno": turno,
-                "tempo_estimado": data.get('tempo_estimado'),
+                "horario_chegada": horario_chegada,
+                "duracao": duracao,
                 "observacao": data.get('observacao'),
             }
             novo = insert_visitante(payload)
 
-        # ---------------------------------------------------------
+        # ------------------------------------------
         # ESCOLA
-        # ---------------------------------------------------------
+        # ------------------------------------------
         elif tipo == 'escola':
             payload = {
                 "nome_escola": data.get('nome_escola'),
@@ -178,16 +185,17 @@ def agendar_submit(tipo):
                 "num_alunos": safe_int(data.get('num_alunos'), 0),
                 "data": d.isoformat(),
                 "turno": turno,
+                "horario_chegada": horario_chegada,
+                "duracao": duracao,
                 "observacao": data.get('observacao'),
             }
             novo = insert_escola(payload)
 
-        # ---------------------------------------------------------
-        # IES  (CORRIGIDO)
-        # ---------------------------------------------------------
+        # ------------------------------------------
+        # IES
+        # ------------------------------------------
         elif tipo == 'ies':
             representante = data.get('representante') or data.get('responsavel')
-
             payload = {
                 "nome_ies": data.get('nome_ies'),
                 "representante": representante,
@@ -197,13 +205,15 @@ def agendar_submit(tipo):
                 "num_alunos": safe_int(data.get('num_alunos'), 0),
                 "data": d.isoformat(),
                 "turno": turno,
+                "horario_chegada": horario_chegada,
+                "duracao": duracao,
                 "observacao": data.get('observacao'),
             }
             novo = insert_ies(payload)
 
-        # ---------------------------------------------------------
+        # ------------------------------------------
         # PESQUISADOR
-        # ---------------------------------------------------------
+        # ------------------------------------------
         else:
             payload = {
                 "nome": data.get('nome'),
@@ -214,7 +224,8 @@ def agendar_submit(tipo):
                 "pesquisa": data.get('pesquisa'),
                 "data": d.isoformat(),
                 "turno": turno,
-                "tempo_estimado": data.get('tempo_estimado'),
+                "horario_chegada": horario_chegada,
+                "duracao": duracao,
                 "observacao": data.get('observacao'),
             }
             novo = insert_pesquisador(payload)
@@ -248,13 +259,13 @@ def ultimos():
                 print(f"Erro Supabase ({t}):", e)
                 dados[t] = []
     else:
-        print("Supabase indisponível; fallback SQL não permitido sem DATABASE_URL.")
         dados = {t: [] for t in ['visitante','escola','ies','pesquisador']}
 
     return render_template('ultimos.html', dados=dados)
 
+
 # -----------------------------------------------------
-# DIAGNÓSTICO OPCIONAL
+# DIAGNÓSTICO
 # -----------------------------------------------------
 @app.get('/diag')
 def diag():
@@ -271,6 +282,6 @@ def diag():
     except Exception as e:
         return {"error": str(e)}, 500
 
-# -----------------------------------------------------
+
 if __name__ == '__main__':
     app.run(debug=True)

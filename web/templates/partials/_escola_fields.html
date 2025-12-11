@@ -47,9 +47,20 @@
   <label class="form-label">Turno *</label>
   <select name="turno" class="form-select" required>
     <option value="">Selecione...</option>
-    <option>manhã</option>
-    <option>tarde</option>
+    <option value="manha">manhã</option>
+    <option value="tarde">tarde</option>
   </select>
+</div>
+
+<div class="col-md-4">
+  <label class="form-label">Horário de chegada *</label>
+  <input name="horario_chegada" type="time" class="form-control" required>
+  <div class="invalid-feedback">Informe o horário de chegada.</div>
+</div>
+
+<div class="col-md-8">
+  <label class="form-label">Duração da visita (opcional)</label>
+  <input name="duracao" type="text" class="form-control" placeholder="ex: 1h30, 2h, 45 min">
 </div>
 
 <div class="col-12">

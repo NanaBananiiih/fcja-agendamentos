@@ -3,37 +3,69 @@ import os
 from supabase import create_client, Client
 from typing import Optional
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY")
-SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")  # opcional (service_role)
+# Carrega variáveis de ambiente
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")  # opcional
 
-if not SUPABASE_URL or not SUPABASE_ANON_KEY:
-    # Não levantamos agora: permitirá import em ambiente sem variáveis (mas avisamos).
-    raise RuntimeError(
-        "Variáveis SUPABASE_URL / SUPABASE_ANON_KEY não definidas. "
-        "Defina-as (Render / .env) antes de iniciar."
+
+def _warn_missing_env():
+    """Avisa no console caso as variáveis não estejam definidas."""
+    print(
+        "\n[AVISO] Variáveis SUPABASE_URL e/ou SUPABASE_ANON_KEY não estão definidas.\n"
+        "O cliente Supabase será 'None' e funções que dependam dele irão falhar.\n"
+        "Defina no .env ou no painel do Render.\n"
     )
 
-# cliente público (anon)
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+# ---------------------------------------------------------
+# Cliente público (anon)
+# ---------------------------------------------------------
+supabase: Optional[Client] = None
+
+if SUPABASE_URL and SUPABASE_ANON_KEY:
+    try:
+        supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+    except Exception as e:
+        print("[ERRO] Falha ao criar cliente Supabase:", e)
+        supabase = None
+else:
+    _warn_missing_env()
 
 
+# ---------------------------------------------------------
+# Cliente administrativo (service_role)
+# ---------------------------------------------------------
 def create_admin_client() -> Optional[Client]:
     """
-    Retorna um cliente com service_role (privilegiado) se SUPABASE_SERVICE_ROLE_KEY
-    estiver definido. Use *apenas* no backend/admin (não em apps distribuídos).
+    Retorna um cliente com service_role (privilegiado)
+    somente se SUPABASE_SERVICE_ROLE_KEY estiver definido.
+    NÃO use service_role no frontend!
     """
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or SUPABASE_SERVICE_ROLE_KEY
+    key = SUPABASE_SERVICE_ROLE_KEY
     if not key:
         return None
+
+    if not SUPABASE_URL:
+        return None
+
     try:
         return create_client(SUPABASE_URL, key)
     except Exception:
         return None
 
 
+# ---------------------------------------------------------
+# Health Check opcional
+# ---------------------------------------------------------
 def health_check() -> bool:
-    """Retorna True se a tabela health responder (usado para ping/teste)."""
+    """
+    Tenta consultar a tabela 'health'. Apenas para testes.
+    Retorna False se não for possível.
+    """
+    if not supabase:
+        return False
+
     try:
         resp = supabase.table("health").select("id").limit(1).execute()
         return bool(resp.data)

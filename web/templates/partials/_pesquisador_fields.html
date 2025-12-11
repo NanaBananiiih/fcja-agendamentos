@@ -1,4 +1,5 @@
 <!-- partial: campos para agendamento PESQUISADOR -->
+
 <div class="col-md-6">
   <label class="form-label">Nome *</label>
   <input name="nome" type="text" class="form-control" required>
@@ -25,8 +26,13 @@
 
 <div class="col-md-6">
   <label class="form-label">Telefone *</label>
-  <input name="telefone" type="tel" class="form-control" required
-         placeholder="DDD + número (somente dígitos)" pattern="[\d\(\)\-\s\+]{8,}">
+  <input 
+      name="telefone" 
+      type="tel" 
+      class="form-control" 
+      required
+      placeholder="DDD + número (somente dígitos)"
+      pattern="[\d\(\)\-\s\+]{8,}">
   <div class="invalid-feedback">Telefone inválido.</div>
 </div>
 
@@ -45,7 +51,22 @@
   <div class="invalid-feedback">Selecione o turno.</div>
 </div>
 
-<div class="col-md-8">
+<div class="col-md-4">
+  <label class="form-label">Horário de chegada *</label>
+  <input name="horario_chegada" type="time" class="form-control" required>
+  <div class="invalid-feedback">Informe o horário de chegada.</div>
+</div>
+
+<div class="col-md-4">
+  <label class="form-label">Duração da visita (opcional)</label>
+  <input 
+      name="duracao" 
+      type="text" 
+      class="form-control"
+      placeholder="ex: 1h30, 2h, 45 min">
+</div>
+
+<div class="col-md-12">
   <label class="form-label">Tema / Pesquisa *</label>
   <input name="pesquisa" type="text" class="form-control" required placeholder="Tema da pesquisa, breve descrição">
   <div class="invalid-feedback">Informe o tema da pesquisa.</div>
