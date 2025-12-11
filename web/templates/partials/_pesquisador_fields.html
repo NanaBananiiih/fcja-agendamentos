@@ -1,7 +1,14 @@
+<!-- partial: campos para agendamento PESQUISADOR -->
 <div class="col-md-6">
   <label class="form-label">Nome *</label>
   <input name="nome" type="text" class="form-control" required>
   <div class="invalid-feedback">Informe o nome.</div>
+</div>
+
+<div class="col-md-6">
+  <label class="form-label">Gênero *</label>
+  <input name="genero" type="text" class="form-control" required>
+  <div class="invalid-feedback">Informe o gênero.</div>
 </div>
 
 <div class="col-md-6">
@@ -18,32 +25,33 @@
 
 <div class="col-md-6">
   <label class="form-label">Telefone *</label>
-  <input name="telefone"
-         type="tel"
-         class="form-control"
-         placeholder="DDD + número (somente dígitos)"
-         required
-         pattern="\(?\d{2}\)?\s?\d{4,5}-?\d{4}">
-  <div class="invalid-feedback">Informe um telefone válido.</div>
+  <input name="telefone" type="tel" class="form-control" required
+         placeholder="DDD + número (somente dígitos)" pattern="[\d\(\)\-\s\+]{8,}">
+  <div class="invalid-feedback">Telefone inválido.</div>
 </div>
 
-<div class="col-md-4">
+<div class="col-md-6">
   <label class="form-label">Data (AAAA-MM-DD) *</label>
   <input name="data" type="date" class="form-control" required>
-  <div class="invalid-feedback">Informe a data.</div>
 </div>
 
 <div class="col-md-4">
   <label class="form-label">Turno *</label>
   <select name="turno" class="form-select" required>
     <option value="">Selecione...</option>
-    <option>manhã</option>
-    <option>tarde</option>
+    <option value="manha">manhã</option>
+    <option value="tarde">tarde</option>
   </select>
   <div class="invalid-feedback">Selecione o turno.</div>
 </div>
 
+<div class="col-md-8">
+  <label class="form-label">Tema / Pesquisa *</label>
+  <input name="pesquisa" type="text" class="form-control" required placeholder="Tema da pesquisa, breve descrição">
+  <div class="invalid-feedback">Informe o tema da pesquisa.</div>
+</div>
+
 <div class="col-12">
-  <label class="form-label">Tema / Observação</label>
+  <label class="form-label">Observação</label>
   <textarea name="observacao" class="form-control" rows="3"></textarea>
 </div>
