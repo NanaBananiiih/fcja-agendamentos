@@ -3,33 +3,40 @@
   <input name="nome_escola" type="text" class="form-control" required>
   <div class="invalid-feedback">Informe o nome da escola.</div>
 </div>
+
 <div class="col-md-4">
   <label class="form-label">Representante *</label>
   <input name="representante" type="text" class="form-control" required>
   <div class="invalid-feedback">Informe o representante.</div>
 </div>
+
 <div class="col-md-6">
   <label class="form-label">E-mail *</label>
   <input name="email" type="email" class="form-control" required>
   <div class="invalid-feedback">E-mail inválido.</div>
 </div>
+
 <div class="col-md-6">
   <label class="form-label">Telefone *</label>
   <input name="telefone" type="tel" class="form-control" required pattern="[\d\(\)\-\s\+]{8,}">
   <div class="invalid-feedback">Telefone inválido.</div>
 </div>
+
 <div class="col-12">
   <label class="form-label">Endereço</label>
-  <input name="endereco" type="text" class="form-control" placeholder="Rua, Nº, Bairro, Cidade, Estado">
+  <input name="endereco" type="text" class="form-control">
 </div>
+
 <div class="col-md-4">
   <label class="form-label">Nº de alunos *</label>
   <input name="num_alunos" type="number" min="1" class="form-control" required>
 </div>
+
 <div class="col-md-4">
   <label class="form-label">Data (AAAA-MM-DD) *</label>
   <input name="data" type="date" class="form-control" required>
 </div>
+
 <div class="col-md-4">
   <label class="form-label">Turno *</label>
   <select name="turno" class="form-select" required>
@@ -38,6 +45,7 @@
     <option>tarde</option>
   </select>
 </div>
+
 <div class="col-12">
   <label class="form-label">Observação</label>
   <textarea name="observacao" class="form-control" rows="3"></textarea>
