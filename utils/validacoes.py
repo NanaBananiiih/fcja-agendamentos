@@ -16,7 +16,6 @@ def validar_data_visita(s: str) -> bool:
     """
     try:
         d = _parse(s)
-        # weekday(): segunda=0, terça=1 ... domingo=6
         return d.weekday() in [1, 2, 3, 4, 5, 6]  # terça a domingo
     except Exception:
         return False
@@ -39,19 +38,42 @@ def validar_email(e: str) -> bool:
 
 def validar_telefone(t: str) -> bool:
     """
-    Valida telefones no formato brasileiro:
-    - (83) 99999-8888
-    - 83 99999-8888
-    - 83999998888
+    Valida telefones brasileiros em formatos comuns:
+
+    Exemplos aceitos:
+      +55 (83) 99999-8888
+      (83) 99999-8888
+      83999998888
+      83 9999 8888
+      999998888
+
+    Regras:
+      - opcional +55 ou 55
+      - opcional DDD com ou sem parênteses (2 dígitos)
+      - número local com 8 ou 9 dígitos, com ou sem hífen
     """
-    return re.fullmatch(r"\(?\d{2}\)?\s?\d{4,5}-?\d{4}", t or "") is not None
+    if not t:
+        return False
+
+    s = t.strip()
+
+    pattern = re.compile(r'''
+        ^(?:\+?55[\s-]*)?                # +55 ou 55 (opcional)
+        (?:\(?\d{2}\)?[\s-]*)?           # DDD opcional
+        (?:\d{4,5}[-\s]?\d{4})$          # número (8 ou 9 dígitos)
+    ''', re.VERBOSE)
+
+    if pattern.match(s):
+        return True
+
+    # fallback: só números (8 a 11 dígitos)
+    digits = re.sub(r'\D', '', s)
+    return 8 <= len(digits) <= 11
 
 # ---------- Normalização ----------
 def normalizar_turno(turno: str) -> str | None:
     """
-    Normaliza o turno informado pelo usuário.
-    Aceita: manhã / manha, tarde.
-    Retorna 'manhã' ou 'tarde'.
+    Normaliza turno: somente manhã ou tarde.
     """
     t = (turno or "").strip().lower()
     if t in {"manha", "manhã"}:
