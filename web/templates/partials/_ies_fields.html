@@ -1,5 +1,4 @@
-{# partial: campos para agendamento IES #}
-
+{# partial: campos para agendamento IES (corrigido) #}
 <div class="col-12">
   <label for="nome_ies" class="form-label">Nome da IES *</label>
   <input type="text" class="form-control" id="nome_ies" name="nome_ies" required>
@@ -20,14 +19,8 @@
 
 <div class="col-md-6">
   <label for="telefone" class="form-label">Telefone *</label>
-  <input 
-      type="tel" 
-      class="form-control" 
-      id="telefone" 
-      name="telefone" 
-      placeholder="DDD + número (somente dígitos)" 
-      required>
-  <div class="invalid-feedback">Informe um telefone válido.</div>
+  <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="DDD + número (somente dígitos)" required pattern="[\d\(\)\-\s\+]{8,}">
+  <div class="invalid-feedback">Informe um telefone válido (somente dígitos).</div>
 </div>
 
 <div class="col-md-6">
@@ -50,33 +43,24 @@
   <label for="turno" class="form-label">Turno *</label>
   <select class="form-select" id="turno" name="turno" required>
     <option value="">Selecione...</option>
-    <option value="manha">manhã</option>
-    <option value="tarde">tarde</option>
+    <option value="manha">Manhã</option>
+    <option value="tarde">Tarde</option>
   </select>
   <div class="invalid-feedback">Selecione o turno.</div>
 </div>
 
-<div class="col-md-4">
-  <label class="form-label">Horário de chegada *</label>
-  <input type="time" name="horario_chegada" class="form-control" required>
+<div class="col-md-6">
+  <label for="horario_chegada" class="form-label">Horário de chegada *</label>
+  <input type="time" class="form-control" id="horario_chegada" name="horario_chegada" required>
   <div class="invalid-feedback">Informe o horário de chegada.</div>
 </div>
 
-<div class="col-md-8">
-  <label class="form-label">Duração da visita (opcional)</label>
-  <input 
-      name="duracao" 
-      type="text" 
-      class="form-control" 
-      placeholder="ex: 1h30, 2h, 45 min">
+<div class="col-md-6">
+  <label for="duracao" class="form-label">Duração da visita (opcional)</label>
+  <input type="text" class="form-control" id="duracao" name="duracao" placeholder="ex: 1h30, 2h, 45 min">
 </div>
 
 <div class="col-12">
-  <label for="observacao" class="form-label">Observações</label>
-  <textarea class="form-control" id="observacao" name="observacao" rows="3"></textarea>
-</div>
-
-<div class="col-12">
-  <label for="observacao" class="form-label">Observações</label>
-  <textarea class="form-control" id="observacao" name="observacao" rows="3"></textarea>
+  <label for="observacao" class="form-label">Observação</label>
+  <textarea class="form-control" id="observacao" name="observacao" rows="4"></textarea>
 </div>
