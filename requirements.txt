@@ -1,8 +1,11 @@
 # Banco (opcional no runtime: só precisa se for usar get_connection()/init_db)
-psycopg2-binary==2.9.10
 python-dotenv==1.0.1
 
-# Supabase (versão estável compatível com dependências)
+# OBS: psycopg2-binary costuma dar problema em Windows/py3.10+.
+# Se der erro ao instalar, comente esta linha e veja as instruções abaixo.
+psycopg2-binary==2.9.10
+
+# Supabase (cliente HTTP)
 supabase==2.25.0
 
 # Interface gráfica
@@ -10,7 +13,7 @@ ttkbootstrap==1.7.3
 tkcalendar==1.6.1
 Pillow==9.5.0
 
-# Web (Flask)
+# Web (Flask e dependências relacionadas)
 Flask==3.0.3
 Werkzeug==3.1.3
 Jinja2==3.1.4
@@ -19,5 +22,5 @@ itsdangerous==2.2.0
 MarkupSafe==2.1.5
 packaging==24.1
 
-# Deploy
+# Deploy (somente no servidor/web)
 gunicorn==23.0.0

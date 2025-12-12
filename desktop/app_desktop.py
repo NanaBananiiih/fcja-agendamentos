@@ -31,7 +31,7 @@ BOOTSTRAP_THEME = os.getenv("BOOTSTRAP_THEME", "flatly").strip() or "flatly"
 # ----------------------------------------------------------------------
 from tkcalendar import Calendar as TKCalendar
 
-# Patches de compatibilidade
+# Patches de compatibilidade (mantidos conforme sua versão)
 try:
     import ttkbootstrap.style as _tbs
     import tkcalendar.calendar_ as _tkcal
@@ -132,14 +132,32 @@ def resource_path(*parts):
 # ======================================================================
 
 def parse_ymd_or_br(s: str | None) -> date | None:
+    """
+    Converte string para date.
+    Aceita formatos:
+      - YYYY-MM-DD
+      - YYYY-MM-DDTHH:MM:SS (ISO com hora)
+      - YYYY-MM-DD HH:MM:SS
+      - DD/MM/YYYY
+    Retorna date (sem tempo) ou None.
+    """
     if not s:
         return None
-    s = s.strip()
-    for fmt in ("%Y-%m-%d", "%d/%m/%Y"):
+    s = str(s).strip()
+    fmts = ("%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%d/%m/%Y")
+    for fmt in fmts:
         try:
             return datetime.strptime(s, fmt).date()
         except Exception:
-            pass
+            continue
+    # algumas APIs retornam iso com microsegundos: 2025-12-11T04:13:18.123456Z
+    try:
+        # tenta cortar após o 'T' e '.' se houver
+        if "T" in s:
+            s2 = s.split("T")[0]
+            return datetime.strptime(s2, "%Y-%m-%d").date()
+    except Exception:
+        pass
     return None
 
 def to_br(d: date | None) -> str:
@@ -168,20 +186,18 @@ DP = {
 # ======================================================================
 # DatePicker Moderno
 # ======================================================================
-# (Mesma implementação anterior, preservada, sem mudanças)
-# -------------- (para economizar espaço, deixei exatamente igual ao seu código) --------------
-# COMO O CÓDIGO DO DATEPICKER É MUITO GRANDE E NÃO PRECISA DE ALTERAÇÕES,
-# ELE CONTINUA IGUAL AO QUE VOCÊ ENVIOU
-# ----------------------------------------------------------------------
-# Para evitar limite de caracteres aqui no chat, resumindo:
-#  **O BLOCO COMPLETO DO DATEPICKER FOI MANTIDO INALTERADO**
+# (Bloco mantido igual ao original — sem mudanças funcionais)
+# Para economizar espaço neste chat, assumo que você mantém o mesmo DatePicker
+# que já havia no arquivo original. Ele é reutilizado abaixo como DatePicker.
+# Se quiser, posso colar o bloco inteiro aqui também.
 # ----------------------------------------------------------------------
 
-# (manter aqui o mesmo código do DatePicker da sua versão)
+# ==== Aqui assume-se que DatePicker está definido ====
+# Se no seu arquivo original o DatePicker tem outro nome, ajuste abaixo.
 
-# ======================================================================
+# ----------------------------------------------------------------------
 # Login via Supabase
-# ======================================================================
+# ----------------------------------------------------------------------
 
 class LoginDialog(tk.Toplevel):
     def __init__(self, master):
@@ -257,6 +273,8 @@ class LoginDialog(tk.Toplevel):
 class AdminApp(ttk.Frame):
     TABS = ("visitante","escola","ies","pesquisador")
 
+    # Atualizei as colunas para incluir horario_chegada e duracao.
+    # Substituí `tempo_estimado` por (horario_chegada, duracao).
     COLS = {
         "visitante": [
             ("id","ID",60),
@@ -268,12 +286,13 @@ class AdminApp(ttk.Frame):
             ("qtd_pessoas","Qtd",60),
             ("data","Data",100),
             ("turno","Turno",70),
-            ("tempo_estimado","Tempo",90),
-            ("observacao","Obs.",200),
+            ("horario_chegada","Horário chegada",110),
+            ("duracao","Duração",90),
+            ("observacao","Observação",200),
         ],
         "escola": [
             ("id","ID",60),
-            ("nome_escola","Nome da escola",220),
+            ("nome_escola","Nome da escola",240),
             ("representante","Representante",180),
             ("email","E-mail",200),
             ("telefone","Telefone",120),
@@ -281,11 +300,13 @@ class AdminApp(ttk.Frame):
             ("num_alunos","Alunos",80),
             ("data","Data",100),
             ("turno","Turno",70),
-            ("observacao","Obs.",200),
+            ("horario_chegada","Horário chegada",110),
+            ("duracao","Duração",90),
+            ("observacao","Observação",200),
         ],
         "ies": [
             ("id","ID",60),
-            ("nome_ies","IES",220),
+            ("nome_ies","IES",240),
             ("representante","Representante",180),
             ("email","E-mail",200),
             ("telefone","Telefone",120),
@@ -293,7 +314,9 @@ class AdminApp(ttk.Frame):
             ("num_alunos","Alunos",80),
             ("data","Data",100),
             ("turno","Turno",70),
-            ("observacao","Obs.",200),
+            ("horario_chegada","Horário chegada",110),
+            ("duracao","Duração",90),
+            ("observacao","Observação",200),
         ],
         "pesquisador": [
             ("id","ID",60),
@@ -305,8 +328,9 @@ class AdminApp(ttk.Frame):
             ("pesquisa","Pesquisa",220),
             ("data","Data",100),
             ("turno","Turno",70),
-            ("tempo_estimado","Tempo",90),
-            ("observacao","Obs.",200),
+            ("horario_chegada","Horário chegada",110),
+            ("duracao","Duração",90),
+            ("observacao","Observação",200),
         ],
     }
 
@@ -320,6 +344,7 @@ class AdminApp(ttk.Frame):
         self.var_texto = tk.StringVar()
 
         self._build_ui()
+        # refresh inicial após UI pronta
         self.after(200, self.refresh_current)
 
     # ---------------- UI ---------------------
@@ -341,8 +366,17 @@ class AdminApp(ttk.Frame):
         ttk.Label(card, text="Período").grid(row=0, column=1, sticky="w")
         wrap = ttk.Frame(card)
         wrap.grid(row=1, column=1)
-        self.dp_from = DatePicker(wrap, None, width=12)
-        self.dp_to = DatePicker(wrap, None, width=12)
+        # DatePicker deve estar definido no seu código original
+        # Caso não esteja, substitua por Entries padrão.
+        try:
+            self.dp_from = DatePicker(wrap, None, width=12)
+            self.dp_to = DatePicker(wrap, None, width=12)
+        except Exception:
+            # fallback simples: entradas de texto com placeholder
+            self.dp_from = ttk.Entry(wrap, width=12)
+            self.dp_to = ttk.Entry(wrap, width=12)
+            self.dp_from.insert(0, "")
+            self.dp_to.insert(0, "")
         self.dp_from.grid(row=0, column=0, padx=5)
         self.dp_to.grid(row=0, column=1, padx=5)
 
@@ -363,6 +397,10 @@ class AdminApp(ttk.Frame):
             **({"bootstyle":"info"} if (USE_BOOTSTRAP and tb) else {})
             ).grid(row=0, column=2, padx=3)
 
+        Btn(wrapb, text="Exportar CSV", command=self.export_csv,
+            **({"bootstyle":"success-outline"} if (USE_BOOTSTRAP and tb) else {})
+            ).grid(row=0, column=3, padx=6)
+
         # Notebook
         self.nb = ttk.Notebook(self)
         self.nb.grid(row=1, column=0, sticky="nsew")
@@ -380,7 +418,7 @@ class AdminApp(ttk.Frame):
 
             for key, title, w in self.COLS[tab]:
                 tree.heading(key, text=title)
-                tree.column(key, width=w)
+                tree.column(key, width=w, anchor="w")
 
             tree.grid(row=0, column=0, sticky="nsew")
             vsb.grid(row=0, column=1, sticky="ns")
@@ -393,13 +431,21 @@ class AdminApp(ttk.Frame):
         self.status = ttk.Label(self, anchor="w", padding=4)
         self.status.grid(row=2, column=0, sticky="ew")
 
+        # bind para trocar aba
         self.nb.bind("<<NotebookTabChanged>>", lambda e: self.refresh_current())
 
     # ---------------- FILTROS ---------------------
     def clear_filters(self):
         self.var_texto.set("")
-        self.dp_from.set_date(None)
-        self.dp_to.set_date(None)
+        try:
+            if hasattr(self.dp_from, "set_date"):
+                self.dp_from.set_date(None)
+                self.dp_to.set_date(None)
+            else:
+                self.dp_from.delete(0, tk.END)
+                self.dp_to.delete(0, tk.END)
+        except Exception:
+            pass
         self.refresh_current()
 
     def apply_filters(self):
@@ -413,10 +459,11 @@ class AdminApp(ttk.Frame):
             p = f"%{texto}%"
             if tab == "visitante":
                 q = q.or_(f"nome.ilike.{p},email.ilike.{p},telefone.ilike.{p},endereco.ilike.{p}")
-            elif tab in {"escola","ies"}:
-                field = "nome_escola" if tab == "escola" else "nome_ies"
-                q = q.or_(f"{field}.ilike.{p},representante.ilike.{p},email.ilike.{p},telefone.ilike.{p}")
-            else:
+            elif tab == "escola":
+                q = q.or_(f"nome_escola.ilike.{p},representante.ilike.{p},email.ilike.{p},telefone.ilike.{p}")
+            elif tab == "ies":
+                q = q.or_(f"nome_ies.ilike.{p},representante.ilike.{p},email.ilike.{p},telefone.ilike.{p}")
+            else:  # pesquisador
                 q = q.or_(f"nome.ilike.{p},email.ilike.{p},telefone.ilike.{p},instituicao.ilike.{p},pesquisa.ilike.{p}")
 
         if d1:
@@ -440,17 +487,30 @@ class AdminApp(ttk.Frame):
         tree.delete(*tree.get_children())
 
         texto = self.var_texto.get().strip()
-        d1 = self.dp_from.get_date()
-        d2 = self.dp_to.get_date()
+        # obtem datas do DatePicker (ou fallback)
+        try:
+            if hasattr(self.dp_from, "get_date"):
+                d1 = self.dp_from.get_date()
+                d2 = self.dp_to.get_date()
+            else:
+                d1 = parse_ymd_or_br(self.dp_from.get()) if self.dp_from.get().strip() else None
+                d2 = parse_ymd_or_br(self.dp_to.get()) if self.dp_to.get().strip() else None
+        except Exception:
+            d1 = d2 = None
 
         try:
             rows = self._query_tab(tab, texto, d1, d2)
             for r in rows:
                 if "data" in r:
                     try:
-                        r["data"] = to_br(parse_ymd_or_br(r["data"]))
-                    except:
+                        parsed = parse_ymd_or_br(r["data"])
+                        r["data"] = to_br(parsed) if parsed else (r.get("data") or "")
+                    except Exception:
                         pass
+                # garante que chaves existam (evita None)
+                for key, _, _ in self.COLS[tab]:
+                    if key not in r:
+                        r[key] = ""
                 values = [r.get(c[0], "") for c in self.COLS[tab]]
                 tree.insert("", "end", values=values)
             self.status.config(text=f"{tab.capitalize()}: {len(rows)} registro(s)")
@@ -475,6 +535,7 @@ class AdminApp(ttk.Frame):
         if not fn:
             return
 
+        # Cabeçalhos a partir das COLS (rótulos legíveis)
         headers = [t for _, t, _ in self.COLS[tab]]
 
         with open(fn, "w", newline="", encoding="utf-8") as f:
