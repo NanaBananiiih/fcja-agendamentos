@@ -1,26 +1,34 @@
 # supabase_client.py
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 from supabase import create_client, Client
 from typing import Optional
 
-# Carrega variáveis de ambiente
+# -------------------------------------------------
+# Carregar .env da RAIZ do projeto (funciona no desktop e web)
+# -------------------------------------------------
+ROOT = Path(__file__).resolve().parent
+ENV_PATH = ROOT / ".env"
+
+load_dotenv(dotenv_path=ENV_PATH)
+
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")  # opcional
 
 
 def _warn_missing_env():
-    """Avisa no console caso as variáveis não estejam definidas."""
     print(
         "\n[AVISO] Variáveis SUPABASE_URL e/ou SUPABASE_ANON_KEY não estão definidas.\n"
         "O cliente Supabase será 'None' e funções que dependam dele irão falhar.\n"
-        "Defina no .env ou no painel do Render.\n"
+        "Defina no .env da raiz do projeto ou no painel do Render.\n"
     )
 
 
-# ---------------------------------------------------------
+# -------------------------------------------------
 # Cliente público (anon)
-# ---------------------------------------------------------
+# -------------------------------------------------
 supabase: Optional[Client] = None
 
 if SUPABASE_URL and SUPABASE_ANON_KEY:
@@ -33,39 +41,24 @@ else:
     _warn_missing_env()
 
 
-# ---------------------------------------------------------
-# Cliente administrativo (service_role)
-# ---------------------------------------------------------
+# -------------------------------------------------
+# Cliente administrativo (service_role) – OPCIONAL
+# -------------------------------------------------
 def create_admin_client() -> Optional[Client]:
-    """
-    Retorna um cliente com service_role (privilegiado)
-    somente se SUPABASE_SERVICE_ROLE_KEY estiver definido.
-    NÃO use service_role no frontend!
-    """
-    key = SUPABASE_SERVICE_ROLE_KEY
-    if not key:
+    if not SUPABASE_SERVICE_ROLE_KEY or not SUPABASE_URL:
         return None
-
-    if not SUPABASE_URL:
-        return None
-
     try:
-        return create_client(SUPABASE_URL, key)
+        return create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     except Exception:
         return None
 
 
-# ---------------------------------------------------------
+# -------------------------------------------------
 # Health Check opcional
-# ---------------------------------------------------------
+# -------------------------------------------------
 def health_check() -> bool:
-    """
-    Tenta consultar a tabela 'health'. Apenas para testes.
-    Retorna False se não for possível.
-    """
     if not supabase:
         return False
-
     try:
         resp = supabase.table("health").select("id").limit(1).execute()
         return bool(resp.data)
