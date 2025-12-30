@@ -6,10 +6,16 @@ from supabase import create_client, Client
 from typing import Optional
 
 # -------------------------------------------------
-# Carregar .env da RAIZ do projeto (funciona no desktop e web)
+# Carregar .env da RAIZ do projeto
+# (funciona em Python normal e em .exe do PyInstaller)
 # -------------------------------------------------
-ROOT = Path(__file__).resolve().parent
-ENV_PATH = ROOT / ".env"
+BASE_DIR = Path(__file__).resolve().parent
+
+# se estiver rodando como .exe (PyInstaller)
+if hasattr(os, "_MEIPASS"):
+    ENV_PATH = Path(os._MEIPASS) / ".env"
+else:
+    ENV_PATH = BASE_DIR / ".env"
 
 load_dotenv(dotenv_path=ENV_PATH)
 
@@ -22,12 +28,12 @@ def _warn_missing_env():
     print(
         "\n[AVISO] Variáveis SUPABASE_URL e/ou SUPABASE_ANON_KEY não estão definidas.\n"
         "O cliente Supabase será 'None' e funções que dependam dele irão falhar.\n"
-        "Defina no .env da raiz do projeto ou no painel do Render.\n"
+        "Defina no .env da raiz do projeto ou inclua no PyInstaller.\n"
     )
 
 
 # -------------------------------------------------
-# Cliente público (anon)
+# Cliente público (anon) → usado no app normal
 # -------------------------------------------------
 supabase: Optional[Client] = None
 
@@ -42,10 +48,10 @@ else:
 
 
 # -------------------------------------------------
-# Cliente administrativo (service_role) – OPCIONAL
+# Cliente administrativo (service_role) → SOMENTE LOGIN
 # -------------------------------------------------
 def create_admin_client() -> Optional[Client]:
-    if not SUPABASE_SERVICE_ROLE_KEY or not SUPABASE_URL:
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
         return None
     try:
         return create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
@@ -54,7 +60,7 @@ def create_admin_client() -> Optional[Client]:
 
 
 # -------------------------------------------------
-# Health Check opcional
+# Health Check opcional (ping)
 # -------------------------------------------------
 def health_check() -> bool:
     if not supabase:
